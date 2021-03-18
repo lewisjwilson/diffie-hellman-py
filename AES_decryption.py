@@ -1,16 +1,15 @@
 from idna import unicode
 
-import dhkeygenerator
 import hashlib
 from Crypto import Random
 from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
 
-print("Running Diffie-Hellman Key Generator")
-key = dhkeygenerator.k_a
-print("DH key = " + str(key))
+print("Reading key from keyfile.txt...")
+keyfile = open("key.txt", 'r')
+key = keyfile.read()
 
-plaintext = input("Insert plaintext: ")
+print("DH key = " + str(key))
 
 class AESCipher(object):
     def __init__(self, key):
@@ -43,10 +42,13 @@ class AESCipher(object):
         last_character = plain_text[len(plain_text) - 1:]
         return plain_text[:-ord(last_character)]
 
+encrypted = open("encrypted_text.txt", 'r')
+encrypted_text = encrypted.read()
+print("Reading Encrypted text from file...: " + encrypted_text)
+try:
+    aes_decrypt = AESCipher(unicode(key)).decrypt(encrypted_text)
+    print("Decrypted Text: " + aes_decrypt)
+except:
+    print("Error: Looks like your DH key or your encrypted text has been messed with!")
 
-aes_encrypt = AESCipher(unicode(key)).encrypt(plaintext)
-print("Encrypted text: " + aes_encrypt)
-file = open("encrypted_text.txt", "w")
-file.write(aes_encrypt)
-keyfile = open("key.txt", "w")
-keyfile.write(str(key))
+

@@ -39,7 +39,6 @@ def choose_alpha():
     return chosen_alpha
 
 
-# prime (implement prime check here)
 q = number.getPrime(13)
 print("Prime q = " + str(q))
 
